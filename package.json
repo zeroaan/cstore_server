@@ -1,0 +1,22 @@
+{
+  "name": "cstore_server",
+  "version": "1.0.0",
+  "description": "cstore review server",
+  "main": "index.js",
+  "scripts": {
+    "start": "babel-node index.js",
+    "dev": "nodemon --exec babel-node index.js"
+  },
+  "author": "zeroaan",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/cli": "^7.12.13",
+    "@babel/core": "^7.12.13",
+    "@babel/node": "^7.12.13",
+    "@babel/preset-env": "^7.12.13",
+    "apollo-server": "^2.19.2",
+    "dotenv": "^8.2.0",
+    "graphql": "^15.5.0",
+    "mongoose": "^5.11.14"
+  }
+}
