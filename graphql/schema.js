@@ -24,10 +24,20 @@ const typeDefs = gql`
     desc: String!
     image: String!
   }
+  type User {
+    _id: ID!
+    username: String!
+    email: String!
+    passwordHash: String!
+    role: Int!
+    token: String!
+  }
   type Query {
     foods: [Food]
     getFood(_id: ID!): Food
     notices: [Notice]
+    users: [User]
+    me(_id: ID!): User
   }
 
   input ReviewInput {
@@ -67,6 +77,15 @@ const typeDefs = gql`
     desc: String
     image: String
   }
+  input SignupInput {
+    username: String!
+    email: String!
+    password: String!
+  }
+  input LoginInput {
+    email: String!
+    password: String!
+  }
   type Mutation {
     createFood(input: CreateFoodInput): Food
     updateFood(_id: ID!, input: UpdateFoodInput): Food
@@ -75,6 +94,10 @@ const typeDefs = gql`
     createNotice(input: CreateNoticeInput): Notice
     updateNotice(_id: ID!, input: CreateNoticeInput): Notice
     deleteNotice(_id: ID!): Notice
+
+    signup(input: SignupInput): Boolean!
+    login(input: LoginInput): User
+    logout: Boolean!
   }
 `
 

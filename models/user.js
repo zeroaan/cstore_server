@@ -3,7 +3,7 @@ import mongoose from "mongoose"
 const { Schema, model } = mongoose
 
 const userSchema = new Schema({
-  nickName: {
+  username: {
     type: String,
     required: true,
   },
@@ -11,13 +11,17 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  password: {
+  passwordHash: {
     type: String,
     required: true,
   },
-  admin: {
-    type: Boolean,
-    default: false,
+  role: {
+    type: Number,
+    default: 0,
+  },
+  token: {
+    type: String,
+    default: "",
   },
 })
 
