@@ -68,6 +68,7 @@ const resolvers = {
     },
     login: async (_, { input: { email, password } }) => {
       const user = await User.findOne({ email })
+
       if (!user) return null
       if (user.token) return null
       if (!bcrypt.compareSync(password, user.passwordHash)) return null
@@ -77,14 +78,15 @@ const resolvers = {
 
       return user
     },
-    logout: async (_, __, { user }) => {
-      console.log(user)
-      if (user?.token) {
-        user.token = ""
-        await User.findOneAndUpdate({ _id: user._id }, user, { new: true })
-        return true
-      }
-      throw new AuthenticationError("Not Authenticated")
+    logout: async (_, { _id }) => {
+      const user = await User.findById(_id)
+
+      if (!user) return false
+      if (user.token === "") return false
+
+      user.token = ""
+      await User.findOneAndUpdate({ _id: user._id }, user, { new: true })
+      return true
     },
   },
 }

@@ -97,7 +97,7 @@ const typeDefs = gql`
 
     signup(input: SignupInput): Boolean!
     login(input: LoginInput): User
-    logout: Boolean!
+    logout(_id: ID!): Boolean!
   }
 `
 
