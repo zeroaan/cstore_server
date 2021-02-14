@@ -1,6 +1,7 @@
 import { ApolloServer } from "apollo-server"
 import typeDefs from "./graphql/schema"
 import resolvers from "./graphql/resolvers"
+import context from "./graphql/context"
 
 import dbConnect from "./models"
 dbConnect()
@@ -8,6 +9,7 @@ dbConnect()
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context,
   playground: true,
 })
 

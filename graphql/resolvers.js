@@ -2,6 +2,7 @@ import { AuthenticationError } from "apollo-server"
 import bcrypt from "bcrypt"
 import sha256 from "crypto-js/sha256"
 import rand from "csprng"
+import mongoose from "mongoose"
 
 import { Food } from "../models/food"
 import { Notice } from "../models/notice"
@@ -49,7 +50,8 @@ const resolvers = {
     },
 
     signup: async (_, { input: { username, email, password } }) => {
-      if (User.find({ email })) return false
+      const checkUser = (await User.findOne({ username })) || (await User.findOne({ email }))
+      if (checkUser) return false
 
       bcrypt.hash(password, 10, async (err, passwordHash) => {
         const newUser = {
@@ -65,18 +67,18 @@ const resolvers = {
       return true
     },
     login: async (_, { input: { email, password } }) => {
-      let user = User.find((user) => user.email === email)
-
+      const user = await User.findOne({ email })
       if (!user) return null
       if (user.token) return null
       if (!bcrypt.compareSync(password, user.passwordHash)) return null
 
-      user.token = sha256(rand(160, 36) + ID + password).toString()
+      user.token = sha256(rand(160, 36) + email + password).toString()
       await User.findOneAndUpdate({ _id: user._id }, user, { new: true })
 
       return user
     },
     logout: async (_, __, { user }) => {
+      console.log(user)
       if (user?.token) {
         user.token = ""
         await User.findOneAndUpdate({ _id: user._id }, user, { new: true })
