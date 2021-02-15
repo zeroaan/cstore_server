@@ -3,7 +3,8 @@ import { gql } from "apollo-server"
 const typeDefs = gql`
   type Review {
     _id: ID!
-    nickName: String!
+    userid: String!
+    username: String!
     date: String!
     post: String!
     star: Float!
@@ -14,7 +15,7 @@ const typeDefs = gql`
     fullName: String!
     price: String!
     image: String!
-    liked: Int!
+    liked: [String]!
     review: [Review]!
   }
   type Notice {
@@ -30,18 +31,24 @@ const typeDefs = gql`
     email: String!
     passwordHash: String!
     role: Int!
-    token: String!
+    myliked: [String]!
+    myreview: [String]!
   }
   type Query {
     foods: [Food]
     getFood(_id: ID!): Food
+
     notices: [Notice]
+
     users: [User]
     me(_id: ID!): User
+    login(email: String!, password: String!): User
+    logout(_id: ID!): Boolean!
   }
 
   input ReviewInput {
-    nickName: String
+    userid: String
+    username: String
     date: String
     post: String
     star: Float
@@ -51,7 +58,7 @@ const typeDefs = gql`
     fullName: String!
     price: String!
     image: String!
-    liked: Int! = 0
+    liked: [String]! = []
     review: [ReviewInput]! = []
   }
   input UpdateFoodInput {
@@ -59,11 +66,14 @@ const typeDefs = gql`
     fullName: String
     price: String
     image: String
-    liked: Int
+    liked: [String]
     review: [ReviewInput]
   }
-  input CreateReviewInput {
-    review: [ReviewInput]
+  input UpdateLikedInput {
+    liked: String
+  }
+  input UpdateReviewInput {
+    review: ReviewInput
   }
   input CreateNoticeInput {
     title: String!
@@ -77,27 +87,18 @@ const typeDefs = gql`
     desc: String
     image: String
   }
-  input SignupInput {
-    username: String!
-    email: String!
-    password: String!
-  }
-  input LoginInput {
-    email: String!
-    password: String!
-  }
   type Mutation {
     createFood(input: CreateFoodInput): Food
     updateFood(_id: ID!, input: UpdateFoodInput): Food
     deleteFood(_id: ID!): Food
-    createReview(_id: ID!, input: CreateReviewInput): Food
+    updateLiked(_id: ID!, input: UpdateLikedInput): Food
+    updateReview(_id: ID!, input: UpdateReviewInput): Food
+
     createNotice(input: CreateNoticeInput): Notice
     updateNotice(_id: ID!, input: CreateNoticeInput): Notice
     deleteNotice(_id: ID!): Notice
 
-    signup(input: SignupInput): Boolean!
-    login(input: LoginInput): User
-    logout(_id: ID!): Boolean!
+    signup(username: String!, email: String!, password: String!): Boolean!
   }
 `
 

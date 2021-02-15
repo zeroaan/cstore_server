@@ -1,8 +1,4 @@
-import { AuthenticationError } from "apollo-server"
 import bcrypt from "bcrypt"
-import sha256 from "crypto-js/sha256"
-import rand from "csprng"
-import mongoose from "mongoose"
 
 import { Food } from "../models/food"
 import { Notice } from "../models/notice"
@@ -25,7 +21,23 @@ const resolvers = {
     me: async (_, { _id }) => {
       return await User.findById(_id)
     },
+    login: async (_, { email, password }) => {
+      const user = await User.findOne({ email })
+
+      if (!user) return null
+      if (!bcrypt.compareSync(password, user.passwordHash)) return null
+
+      return user
+    },
+    logout: async (_, { _id }) => {
+      const user = await User.findById(_id)
+
+      if (!user) return false
+
+      return true
+    },
   },
+
   Mutation: {
     createFood: async (_, { input }) => {
       return await Food.create(input)
@@ -36,7 +48,14 @@ const resolvers = {
     deleteFood: async (_, { _id }) => {
       return await Food.findOneAndDelete({ _id })
     },
-    createReview: async (_, { _id, input }) => {
+    updateLiked: async (_, { _id, input }) => {
+      const food = await Food.findById(_id)
+      food.liked.map(async (v) => {
+        if (v === input.liked) return await Food.findOneAndUpdate({ _id }, { $pull: input }, { new: true })
+      })
+      return await Food.findOneAndUpdate({ _id }, { $push: input }, { new: true })
+    },
+    updateReview: async (_, { _id, input }) => {
       return await Food.findOneAndUpdate({ _id }, { $push: input }, { new: true })
     },
     createNotice: async (_, { input }) => {
@@ -49,7 +68,7 @@ const resolvers = {
       return await Notice.findOneAndDelete({ _id })
     },
 
-    signup: async (_, { input: { username, email, password } }) => {
+    signup: async (_, { username, email, password }) => {
       const checkUser = (await User.findOne({ username })) || (await User.findOne({ email }))
       if (checkUser) return false
 
@@ -59,33 +78,12 @@ const resolvers = {
           email,
           passwordHash,
           role: 0,
-          token: "",
+          myliked: [],
+          myreview: [],
         }
         await User.create(newUser)
       })
 
-      return true
-    },
-    login: async (_, { input: { email, password } }) => {
-      const user = await User.findOne({ email })
-
-      if (!user) return null
-      if (user.token) return null
-      if (!bcrypt.compareSync(password, user.passwordHash)) return null
-
-      user.token = sha256(rand(160, 36) + email + password).toString()
-      await User.findOneAndUpdate({ _id: user._id }, user, { new: true })
-
-      return user
-    },
-    logout: async (_, { _id }) => {
-      const user = await User.findById(_id)
-
-      if (!user) return false
-      if (user.token === "") return false
-
-      user.token = ""
-      await User.findOneAndUpdate({ _id: user._id }, user, { new: true })
       return true
     },
   },

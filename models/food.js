@@ -3,12 +3,16 @@ import mongoose from "mongoose"
 const { Schema, model } = mongoose
 
 const reviewSchema = new Schema({
-  nickName: {
+  userid: {
+    type: String,
+    required: true,
+  },
+  username: {
     type: String,
     required: true,
   },
   date: {
-    type: String,
+    type: Date,
     required: true,
   },
   post: {
@@ -39,12 +43,12 @@ const foodSchema = new Schema({
     required: true,
   },
   liked: {
-    type: Number,
-    required: true,
+    type: [String],
+    default: [],
   },
   review: {
     type: [reviewSchema],
-    required: true,
+    default: [],
   },
 })
 

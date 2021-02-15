@@ -19,9 +19,13 @@ const userSchema = new Schema({
     type: Number,
     default: 0,
   },
-  token: {
-    type: String,
-    default: "",
+  myliked: {
+    type: [String],
+    default: [],
+  },
+  myreview: {
+    type: [String],
+    default: [],
   },
 })
 
