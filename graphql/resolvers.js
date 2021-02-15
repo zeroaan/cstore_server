@@ -48,14 +48,14 @@ const resolvers = {
     deleteFood: async (_, { _id }) => {
       return await Food.findOneAndDelete({ _id })
     },
-    updateLiked: async (_, { _id, input }) => {
+    updateFoodLiked: async (_, { _id, input }) => {
       const food = await Food.findById(_id)
-      food.liked.map(async (v) => {
-        if (v === input.liked) return await Food.findOneAndUpdate({ _id }, { $pull: input }, { new: true })
-      })
+      if (food.liked.includes(input.liked)) {
+        return await Food.findOneAndUpdate({ _id }, { $pull: input }, { new: true })
+      }
       return await Food.findOneAndUpdate({ _id }, { $push: input }, { new: true })
     },
-    updateReview: async (_, { _id, input }) => {
+    updateFoodReview: async (_, { _id, input }) => {
       return await Food.findOneAndUpdate({ _id }, { $push: input }, { new: true })
     },
     createNotice: async (_, { input }) => {
@@ -85,6 +85,20 @@ const resolvers = {
       })
 
       return true
+    },
+    updateUserLiked: async (_, { _id, input }) => {
+      const user = await User.findById(_id)
+      if (user.myliked.includes(input.myliked)) {
+        return await User.findOneAndUpdate({ _id }, { $pull: input }, { new: true })
+      }
+      return await User.findOneAndUpdate({ _id }, { $push: input }, { new: true })
+    },
+    updateUserReview: async (_, { _id, input }) => {
+      const user = await User.findById(_id)
+      if (user.myreview.includes(input.myreview)) {
+        return null
+      }
+      return await User.findOneAndUpdate({ _id }, { $push: input }, { new: true })
     },
   },
 }

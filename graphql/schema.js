@@ -69,10 +69,10 @@ const typeDefs = gql`
     liked: [String]
     review: [ReviewInput]
   }
-  input UpdateLikedInput {
+  input UpdateFoodLikedInput {
     liked: String
   }
-  input UpdateReviewInput {
+  input UpdateFoodReviewInput {
     review: ReviewInput
   }
   input CreateNoticeInput {
@@ -87,18 +87,26 @@ const typeDefs = gql`
     desc: String
     image: String
   }
+  input UpdateUserLikedInput {
+    myliked: String
+  }
+  input UpdateUserReviewInput {
+    myreview: String
+  }
   type Mutation {
     createFood(input: CreateFoodInput): Food
     updateFood(_id: ID!, input: UpdateFoodInput): Food
     deleteFood(_id: ID!): Food
-    updateLiked(_id: ID!, input: UpdateLikedInput): Food
-    updateReview(_id: ID!, input: UpdateReviewInput): Food
+    updateFoodLiked(_id: ID!, input: UpdateFoodLikedInput): Food
+    updateFoodReview(_id: ID!, input: UpdateFoodReviewInput): Food
 
     createNotice(input: CreateNoticeInput): Notice
     updateNotice(_id: ID!, input: CreateNoticeInput): Notice
     deleteNotice(_id: ID!): Notice
 
     signup(username: String!, email: String!, password: String!): Boolean!
+    updateUserLiked(_id: ID!, input: UpdateUserLikedInput): User
+    updateUserReview(_id: ID!, input: UpdateUserReviewInput): User
   }
 `
 
