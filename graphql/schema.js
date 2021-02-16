@@ -44,6 +44,8 @@ const typeDefs = gql`
     me(_id: ID!): User
     login(email: String!, password: String!): User
     logout(_id: ID!): Boolean!
+    checkUsername(username: String!): Boolean!
+    checkEmail(email: String!): Boolean!
   }
 
   input ReviewInput {
