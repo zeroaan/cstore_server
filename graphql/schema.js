@@ -99,7 +99,7 @@ const typeDefs = gql`
     createFood(input: CreateFoodInput): Food
     updateFood(_id: ID!, input: UpdateFoodInput): Food
     deleteFood(_id: ID!): Food
-    updateFoodLiked(_id: ID!, input: UpdateFoodLikedInput): Food
+    updateFoodLiked(_id: ID!, liked: String!): Food
     updateFoodReview(_id: ID!, input: UpdateFoodReviewInput): Food
 
     createNotice(input: CreateNoticeInput): Notice

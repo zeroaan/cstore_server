@@ -56,12 +56,12 @@ const resolvers = {
     deleteFood: async (_, { _id }) => {
       return await Food.findOneAndDelete({ _id })
     },
-    updateFoodLiked: async (_, { _id, input }) => {
+    updateFoodLiked: async (_, { _id, liked }) => {
       const food = await Food.findById(_id)
-      if (food.liked.includes(input.liked)) {
-        return await Food.findOneAndUpdate({ _id }, { $pull: input }, { new: true })
+      if (food.liked.includes(liked)) {
+        return await Food.findOneAndUpdate({ _id }, { $pull: { liked: liked } }, { new: true })
       }
-      return await Food.findOneAndUpdate({ _id }, { $push: input }, { new: true })
+      return await Food.findOneAndUpdate({ _id }, { $push: { liked: liked } }, { new: true })
     },
     updateFoodReview: async (_, { _id, input }) => {
       return await Food.findOneAndUpdate({ _id }, { $push: input }, { new: true })
