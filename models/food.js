@@ -38,6 +38,10 @@ const foodSchema = new Schema({
     type: String,
     required: true,
   },
+  sumStar: {
+    type: Number,
+    default: 0.0,
+  },
   image: {
     type: String,
     required: true,
@@ -49,6 +53,10 @@ const foodSchema = new Schema({
   review: {
     type: [reviewSchema],
     default: [],
+  },
+  category: {
+    type: String,
+    required: true,
   },
 })
 

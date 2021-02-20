@@ -59,12 +59,23 @@ const resolvers = {
     updateFoodLiked: async (_, { _id, liked }) => {
       const food = await Food.findById(_id)
       if (food.liked.includes(liked)) {
-        return await Food.findOneAndUpdate({ _id }, { $pull: { liked: liked } }, { new: true })
+        await Food.findOneAndUpdate({ _id }, { $pull: { liked: liked } }, { new: true })
+      } else {
+        await Food.findOneAndUpdate({ _id }, { $push: { liked: liked } }, { new: true })
       }
-      return await Food.findOneAndUpdate({ _id }, { $push: { liked: liked } }, { new: true })
+      return await Food.find()
     },
-    updateFoodReview: async (_, { _id, input }) => {
-      return await Food.findOneAndUpdate({ _id }, { $push: input }, { new: true })
+    updateFoodReview: async (_, { _id, userid, username, date, post, star }) => {
+      const food = await Food.findById(_id)
+      await Food.findOneAndUpdate(
+        { _id },
+        {
+          sumStar: ((food.sumStar + star) / (food.review.length + 1)).toFixed(1),
+          $push: { review: { userid, username, date, post, star } },
+        },
+        { new: true },
+      )
+      return await Food.find()
     },
     createNotice: async (_, { input }) => {
       return await Notice.create(input)

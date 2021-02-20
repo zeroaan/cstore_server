@@ -14,9 +14,11 @@ const typeDefs = gql`
     name: String!
     fullName: String!
     price: String!
+    sumStar: Float!
     image: String!
     liked: [String]!
     review: [Review]!
+    category: String!
   }
   type Notice {
     _id: ID!
@@ -59,23 +61,21 @@ const typeDefs = gql`
     name: String!
     fullName: String!
     price: String!
+    sumStar: Float!
     image: String!
     liked: [String]! = []
     review: [ReviewInput]! = []
+    category: String!
   }
   input UpdateFoodInput {
     name: String
     fullName: String
     price: String
+    sumStar: Float
     image: String
     liked: [String]
     review: [ReviewInput]
-  }
-  input UpdateFoodLikedInput {
-    liked: String
-  }
-  input UpdateFoodReviewInput {
-    review: ReviewInput
+    category: String!
   }
   input CreateNoticeInput {
     title: String!
@@ -99,8 +99,8 @@ const typeDefs = gql`
     createFood(input: CreateFoodInput): Food
     updateFood(_id: ID!, input: UpdateFoodInput): Food
     deleteFood(_id: ID!): Food
-    updateFoodLiked(_id: ID!, liked: String!): Food
-    updateFoodReview(_id: ID!, input: UpdateFoodReviewInput): Food
+    updateFoodLiked(_id: ID!, liked: String!): [Food]
+    updateFoodReview(_id: ID!, userid: String!, username: String!, date: String!, post: String!, star: Float!): [Food]
 
     createNotice(input: CreateNoticeInput): Notice
     updateNotice(_id: ID!, input: CreateNoticeInput): Notice
