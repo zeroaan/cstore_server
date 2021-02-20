@@ -70,7 +70,7 @@ const resolvers = {
       await Food.findOneAndUpdate(
         { _id },
         {
-          sumStar: ((food.sumStar + star) / (food.review.length + 1)).toFixed(1),
+          sumStar: food.sumStar + star,
           $push: { review: { userid, username, date, post, star } },
         },
         { new: true },
