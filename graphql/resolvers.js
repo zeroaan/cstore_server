@@ -21,19 +21,6 @@ const resolvers = {
     me: async (_, { _id }) => {
       return await User.findById(_id)
     },
-    login: async (_, { email, password }) => {
-      const user = await User.findOne({ email })
-
-      if (!user) return null
-      if (!bcrypt.compareSync(password, user.passwordHash)) return null
-
-      return user
-    },
-    logout: async (_, { _id }) => {
-      const user = await User.findById(_id)
-      if (!user) return false
-      return true
-    },
     checkUsername: async (_, { username }) => {
       const user = await User.findOne({ username })
       if (user) return false
@@ -103,6 +90,19 @@ const resolvers = {
         await User.create(newUser)
       })
 
+      return true
+    },
+    login: async (_, { email, password }) => {
+      const user = await User.findOne({ email })
+
+      if (!user) return null
+      if (!bcrypt.compareSync(password, user.passwordHash)) return null
+
+      return user
+    },
+    logout: async (_, { _id }) => {
+      const user = await User.findById(_id)
+      if (!user) return false
       return true
     },
     updateUserLiked: async (_, { _id, input }) => {

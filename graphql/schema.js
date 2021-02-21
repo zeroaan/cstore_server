@@ -44,8 +44,6 @@ const typeDefs = gql`
 
     users: [User]
     me(_id: ID!): User
-    login(email: String!, password: String!): User
-    logout(_id: ID!): Boolean!
     checkUsername(username: String!): Boolean!
     checkEmail(email: String!): Boolean!
   }
@@ -107,6 +105,8 @@ const typeDefs = gql`
     deleteNotice(_id: ID!): Notice
 
     signup(username: String!, email: String!, password: String!): Boolean!
+    login(email: String!, password: String!): User
+    logout(_id: ID!): Boolean!
     updateUserLiked(_id: ID!, input: UpdateUserLikedInput): User
     updateUserReview(_id: ID!, input: UpdateUserReviewInput): User
   }
