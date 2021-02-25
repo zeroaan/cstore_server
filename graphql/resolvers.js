@@ -105,19 +105,21 @@ const resolvers = {
       if (!user) return false
       return true
     },
-    updateUserLiked: async (_, { _id, input }) => {
+    updateUserLiked: async (_, { _id, myliked }) => {
       const user = await User.findById(_id)
-      if (user.myliked.includes(input.myliked)) {
-        return await User.findOneAndUpdate({ _id }, { $pull: input }, { new: true })
+      if (user.myliked.includes(myliked)) {
+        await User.findOneAndUpdate({ _id }, { $pull: { myliked: myliked } }, { new: true })
+      } else {
+        await User.findOneAndUpdate({ _id }, { $push: { myliked: myliked } }, { new: true })
       }
-      return await User.findOneAndUpdate({ _id }, { $push: input }, { new: true })
+      return await User.findById(_id)
     },
-    updateUserReview: async (_, { _id, input }) => {
+    updateUserReview: async (_, { _id, myreview }) => {
       const user = await User.findById(_id)
-      if (user.myreview.includes(input.myreview)) {
-        return null
+      if (!user.myreview.includes(myreview)) {
+        await User.findOneAndUpdate({ _id }, { $push: { myreview: myreview } }, { new: true })
       }
-      return await User.findOneAndUpdate({ _id }, { $push: input }, { new: true })
+      return await User.findById(_id)
     },
   },
 }

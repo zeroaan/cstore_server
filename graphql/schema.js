@@ -87,12 +87,6 @@ const typeDefs = gql`
     desc: String
     image: String
   }
-  input UpdateUserLikedInput {
-    myliked: String
-  }
-  input UpdateUserReviewInput {
-    myreview: String
-  }
   type Mutation {
     createFood(input: CreateFoodInput): Food
     updateFood(_id: ID!, input: UpdateFoodInput): Food
@@ -107,8 +101,8 @@ const typeDefs = gql`
     signup(username: String!, email: String!, password: String!): Boolean!
     login(email: String!, password: String!): User
     logout(_id: ID!): Boolean!
-    updateUserLiked(_id: ID!, input: UpdateUserLikedInput): User
-    updateUserReview(_id: ID!, input: UpdateUserReviewInput): User
+    updateUserLiked(_id: ID!, myliked: String!): User
+    updateUserReview(_id: ID!, myreview: String!): User
   }
 `
 
