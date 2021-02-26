@@ -103,6 +103,7 @@ const typeDefs = gql`
     logout(_id: ID!): Boolean!
     updateUserLiked(_id: ID!, myliked: String!): User
     updateUserReview(_id: ID!, myreview: String!): User
+    changeUsername(_id: ID!, username: String!): User
   }
 `
 
