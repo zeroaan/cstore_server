@@ -14,8 +14,8 @@ const typeDefs = gql`
     name: String!
     fullName: String!
     price: String!
-    sumStar: Float!
     image: String!
+    sumStar: Float!
     liked: [String]!
     review: [Review]!
     category: String!
@@ -59,8 +59,8 @@ const typeDefs = gql`
     name: String!
     fullName: String!
     price: String!
-    sumStar: Float!
     image: String!
+    sumStar: Float! = 0
     liked: [String]! = []
     review: [ReviewInput]! = []
     category: String!
